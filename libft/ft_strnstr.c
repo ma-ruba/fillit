@@ -1,27 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_strnstr.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bconwy <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/03/17 16:13:23 by bconwy            #+#    #+#             */
-/*   Updated: 2019/03/17 16:13:28 by bconwy           ###   ########.fr       */
+/*   Created: 2018/11/30 17:56:27 by bconwy            #+#    #+#             */
+/*   Updated: 2018/11/30 17:56:35 by bconwy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "fillit.h"
+#include "libft.h"
 
-int	main(int argc, char **argv)
+char	*ft_strnstr(const char *str1, const char *str2, size_t n)
 {
-	if (argc == 2)
+	size_t i;
+	size_t j;
+
+	i = 0;
+	j = 0;
+	if (str2[0] == '\0')
+		return ((char *)str1);
+	while (str1[i] != '\0' && i < n)
 	{
-		if (ft_read_valid_file(argv[1]) != 1)
-        {
-            write(1, "error\n", 6);
-            return (0);
-        }
-		ft_fillit(argv[1]);
+		j = 0;
+		while (str1[i + j] == str2[j] && (i + j) < n)
+		{
+			j++;
+			if (str2[j] == '\0')
+				return ((char *)str1 + i);
+		}
+		i++;
 	}
-	return (0);
+	return (NULL);
 }

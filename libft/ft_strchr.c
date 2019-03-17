@@ -1,27 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_strchr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bconwy <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/03/17 16:13:23 by bconwy            #+#    #+#             */
-/*   Updated: 2019/03/17 16:13:28 by bconwy           ###   ########.fr       */
+/*   Created: 2018/11/28 19:43:45 by bconwy            #+#    #+#             */
+/*   Updated: 2018/11/28 19:43:49 by bconwy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "fillit.h"
+#include "libft.h"
 
-int	main(int argc, char **argv)
+char	*ft_strchr(const char *str, int ch)
 {
-	if (argc == 2)
+	int		i;
+	char	*tmp;
+
+	i = 0;
+	tmp = (char *)str;
+	if (ch == '\0')
 	{
-		if (ft_read_valid_file(argv[1]) != 1)
-        {
-            write(1, "error\n", 6);
-            return (0);
-        }
-		ft_fillit(argv[1]);
+		while (tmp[i])
+			i++;
+		return (&tmp[i]);
 	}
-	return (0);
+	while (tmp[i] != (char)ch && tmp[i])
+		i++;
+	if (!tmp[i])
+		return (NULL);
+	else if (tmp[i] == (char)ch)
+		return (&tmp[i]);
+	return (NULL);
 }

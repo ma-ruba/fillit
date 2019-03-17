@@ -1,27 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_memccpy.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bconwy <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/03/17 16:13:23 by bconwy            #+#    #+#             */
-/*   Updated: 2019/03/17 16:13:28 by bconwy           ###   ########.fr       */
+/*   Created: 2018/12/02 17:14:58 by bconwy            #+#    #+#             */
+/*   Updated: 2018/12/02 17:15:00 by bconwy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "fillit.h"
+#include "libft.h"
 
-int	main(int argc, char **argv)
+void	*ft_memccpy(void *dst, const void *src, int c, size_t n)
 {
-	if (argc == 2)
+	unsigned char	*d;
+	unsigned char	*s;
+	unsigned int	i;
+
+	i = 0;
+	d = dst;
+	s = (unsigned char*)src;
+	while (i < n)
 	{
-		if (ft_read_valid_file(argv[1]) != 1)
-        {
-            write(1, "error\n", 6);
-            return (0);
-        }
-		ft_fillit(argv[1]);
+		d[i] = s[i];
+		if (s[i] == (unsigned char)c)
+			return (d + i + 1);
+		i++;
 	}
-	return (0);
+	return (NULL);
 }

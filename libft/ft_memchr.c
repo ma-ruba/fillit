@@ -1,27 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_memchr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bconwy <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/03/17 16:13:23 by bconwy            #+#    #+#             */
-/*   Updated: 2019/03/17 16:13:28 by bconwy           ###   ########.fr       */
+/*   Created: 2018/11/28 17:22:09 by bconwy            #+#    #+#             */
+/*   Updated: 2018/11/28 17:22:13 by bconwy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "fillit.h"
+#include "libft.h"
 
-int	main(int argc, char **argv)
+void	*ft_memchr(const void *arr, int c, size_t n)
 {
-	if (argc == 2)
+	size_t i;
+
+	i = 0;
+	while (i < n)
 	{
-		if (ft_read_valid_file(argv[1]) != 1)
-        {
-            write(1, "error\n", 6);
-            return (0);
-        }
-		ft_fillit(argv[1]);
+		if (((unsigned char *)arr)[i] == (unsigned char)c)
+			return ((void *)(arr + i));
+		i++;
 	}
-	return (0);
+	return (NULL);
 }

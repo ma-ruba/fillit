@@ -1,27 +1,45 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_strstr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bconwy <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/03/17 16:13:23 by bconwy            #+#    #+#             */
-/*   Updated: 2019/03/17 16:13:28 by bconwy           ###   ########.fr       */
+/*   Created: 2018/11/30 17:56:18 by bconwy            #+#    #+#             */
+/*   Updated: 2018/11/30 17:56:20 by bconwy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "fillit.h"
+#include "libft.h"
 
-int	main(int argc, char **argv)
+static int	ft_strdif(char *s1, char *s2)
 {
-	if (argc == 2)
+	int i;
+
+	i = 0;
+	while (s2[i] != '\0')
 	{
-		if (ft_read_valid_file(argv[1]) != 1)
-        {
-            write(1, "error\n", 6);
-            return (0);
-        }
-		ft_fillit(argv[1]);
+		if (s1[i] != s2[i])
+			return (s1[i] - s2[i]);
+		i++;
 	}
 	return (0);
+}
+
+char		*ft_strstr(const char *str1, const char *str2)
+{
+	int i;
+	int j;
+
+	i = 0;
+	j = 0;
+	if (str1 == str2)
+		return ((char *)str1);
+	while (str1[i])
+	{
+		if (ft_strdif((char *)&str1[i], (char *)str2) == 0)
+			return ((char *)&str1[i]);
+		i++;
+	}
+	return (NULL);
 }

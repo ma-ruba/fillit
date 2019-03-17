@@ -1,27 +1,42 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_strrchr.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bconwy <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/03/17 16:13:23 by bconwy            #+#    #+#             */
-/*   Updated: 2019/03/17 16:13:28 by bconwy           ###   ########.fr       */
+/*   Created: 2018/11/30 17:47:10 by bconwy            #+#    #+#             */
+/*   Updated: 2018/11/30 17:47:13 by bconwy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "fillit.h"
+#include "libft.h"
 
-int	main(int argc, char **argv)
+char	*ft_strrchr(const char *str, int ch)
 {
-	if (argc == 2)
+	int		i;
+	char	*tmp;
+	int		buf;
+
+	buf = -1;
+	i = 0;
+	tmp = (char *)str;
+	if (ch == '\0')
 	{
-		if (ft_read_valid_file(argv[1]) != 1)
-        {
-            write(1, "error\n", 6);
-            return (0);
-        }
-		ft_fillit(argv[1]);
+		while (tmp[i])
+			i++;
+		return (&tmp[i]);
 	}
-	return (0);
+	while (tmp[i])
+	{
+		while (tmp[i] != ch && tmp[i])
+			i++;
+		if (tmp[i])
+			buf = i++;
+	}
+	if (buf == -1)
+		return (NULL);
+	else if (buf != -1)
+		return (&tmp[buf]);
+	return (NULL);
 }

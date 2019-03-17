@@ -1,27 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_strnew.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bconwy <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/03/17 16:13:23 by bconwy            #+#    #+#             */
-/*   Updated: 2019/03/17 16:13:28 by bconwy           ###   ########.fr       */
+/*   Created: 2018/12/23 20:37:50 by bconwy            #+#    #+#             */
+/*   Updated: 2018/12/23 20:37:51 by bconwy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "fillit.h"
+#include "libft.h"
 
-int	main(int argc, char **argv)
+char	*ft_strnew(size_t size)
 {
-	if (argc == 2)
+	char	*chstr;
+	size_t	i;
+
+	i = 0;
+	chstr = (char *)malloc(sizeof(char) * (size + 1));
+	if (chstr)
 	{
-		if (ft_read_valid_file(argv[1]) != 1)
-        {
-            write(1, "error\n", 6);
-            return (0);
-        }
-		ft_fillit(argv[1]);
+		while (i < size)
+		{
+			chstr[i] = 0;
+			i++;
+		}
+		chstr[i] = '\0';
+		return (chstr);
 	}
-	return (0);
+	else
+		return (NULL);
 }

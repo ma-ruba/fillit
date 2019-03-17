@@ -1,27 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_memcmp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bconwy <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/03/17 16:13:23 by bconwy            #+#    #+#             */
-/*   Updated: 2019/03/17 16:13:28 by bconwy           ###   ########.fr       */
+/*   Created: 2018/11/28 17:39:43 by bconwy            #+#    #+#             */
+/*   Updated: 2018/11/28 17:39:46 by bconwy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "fillit.h"
+#include "libft.h"
 
-int	main(int argc, char **argv)
+int	ft_memcmp(const void *arr1, const void *arr2, size_t n)
 {
-	if (argc == 2)
+	size_t			i;
+	unsigned char	*str_arr1;
+	unsigned char	*str_arr2;
+
+	i = 0;
+	str_arr1 = (unsigned char *)arr1;
+	str_arr2 = (unsigned char *)arr2;
+	while (i < n)
 	{
-		if (ft_read_valid_file(argv[1]) != 1)
-        {
-            write(1, "error\n", 6);
-            return (0);
-        }
-		ft_fillit(argv[1]);
+		if (str_arr1[i] != str_arr2[i])
+			return (str_arr1[i] - str_arr2[i]);
+		i++;
 	}
 	return (0);
 }
