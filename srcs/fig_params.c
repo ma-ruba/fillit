@@ -1,6 +1,6 @@
 #include "fillit.h"
 
-void	ft_tetr_height(char *buff, t_fig *fig)
+/*void	ft_tetr_height(char *buff, t_fig *fig)
 {
 	int	count;
 	int	block_count;
@@ -28,9 +28,9 @@ void	ft_tetr_height(char *buff, t_fig *fig)
 			fig->height = count / 5;
 		}
 	}
-}
+}*/
 
-void    ft_tetr_width(char *buff, t_fig *fig)
+/*void    ft_tetr_width(char *buff, t_fig *fig)
 {
         int width;
 
@@ -49,7 +49,7 @@ void    ft_tetr_width(char *buff, t_fig *fig)
             buff++;
         }
         fig->width = width;
-}
+}*/
 
 void	ft_fig_coord(char *buff, t_fig *fig) // рассчитываются смещения 3ех решеток в тетримине относительно 1ой
 {

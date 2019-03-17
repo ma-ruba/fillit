@@ -2,7 +2,7 @@
 
 // Проверка поданного в программу файла на валидность
 
-int ft_connect_tetr(char *buff)
+int ft_connect_tetr(char *buff) // тут что-то не так
 {
     int connect_count;
 
