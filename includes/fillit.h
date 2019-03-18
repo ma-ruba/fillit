@@ -13,7 +13,6 @@ typedef struct	s_fig
 	char			coord[3][2];
 	int				tetr_numb;
 	char			letter;
-	struct s_fig	*next;
 }					t_fig;
 
 int 	ft_connect_tetr(char *buff);

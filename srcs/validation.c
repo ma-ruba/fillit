@@ -12,28 +12,32 @@
 
 #include "fillit.h"
 
-// Проверка поданного в программу файла на валидность
+// Проверка поданного в программу файла на валидность. Почти отлаженно кроме строки 114 
 
 int ft_connect_tetr(char *buff) // проверяет что элементы тетримины касаются друг-друга
 {
     int connect_count;
+	int	i;
 
 	connect_count = 0;
-	while (*buff != '\n' && *(buff + 1) != '\n')
+	i = 0;
+	while (buff[i])
 	{
-		while (*buff != '#' && (buff + 1))
-			buff++;
-		if (*(buff + 1) == '#')
+		while (buff[i] != '#' && buff[i + 1])
+			i++;
+		if (!buff[i + 1])
+			break ;
+		if (buff[i + 1] == '#')
 			connect_count++;
-		if (*(buff - 1) == '#')
+		if (buff[i - 1] == '#')
 			connect_count++;
-		if (*(buff + 5) == '#')
+		if (buff[i + 5] == '#')
 			connect_count++;
-		if (*(buff - 5) == '#')
+		if (buff[i - 5] == '#')
 			connect_count++;
-		buff++;
+		i++;
 	}
-	if (connect_count != 6 || connect_count != 8)
+	if (connect_count != 6 && connect_count != 8)
 		return (-1);
     return (1);
 }
@@ -45,9 +49,9 @@ int	ft_valid_block_numb(char *buff) // проверяется что нет ли
 
 	i = 0;
 	block_count = 0;
-	while (buff[i] != '\n' && buff[i + 1] != '\n')
+	while (buff[i] != '\n' || buff[i + 1] != '\n')
 	{
-		if (buff[i] != '\n' || buff[i] != '#' || buff[i] != '.')
+		if (buff[i] != '\n' && buff[i] != '#' && buff[i] != '.')
 			return (-1);
 		if (buff[i] == '#')
 			block_count++;
@@ -100,7 +104,7 @@ int	ft_read_valid_file(char *file_name)
 	fd = open(file_name, O_RDONLY);
     if (fd < 0)
 		return (-1);
-	if ((ret = read(fd, buff, BUFF_SIZE)) > 0)
+	while ((ret = read(fd, buff, BUFF_SIZE)) > 0)
 	{
 		buff[ret] = '\0';
         if (close(fd) == -1)
@@ -109,27 +113,10 @@ int	ft_read_valid_file(char *file_name)
 			return (-1);
 		tetr_count++;
 	}
-    if (close(fd) == -1)
-        return (-1);
+    //if (close(fd) == -1) // Почему-то возвращвет -1
+        //return (-1);
+	close(fd);
 	if (!(tetr_count >= 1 && tetr_count <= 26))
 		return (-1);
 	return (1);
-}
-
-int	ft_tetr_count(char *file_name) 
-{
-	int		fd;
-	int		ret;
-	char	buff[400];
-
-	if (!(file_name))
-        return (0);
-	fd = open(file_name, O_RDONLY);
-	if (fd < 0)
-		return (0);
-	if (!(ret = read(fd, buff, 546) > 0))
-		return (0);
-	if (close (fd) == -1)
-		return (0);
-	return (ret / 21);
 }

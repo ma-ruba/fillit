@@ -13,6 +13,7 @@
 #include "fillit.h"
 
 /* Все доделано но не отлажено
+Оптимизация: можно ускорить если уменьшить количество чтения файла. Сейчас 3 раза
 */
 
 int	ft_fillit(char *file_name) // основной алгоритм (30 строк)
@@ -21,7 +22,6 @@ int	ft_fillit(char *file_name) // основной алгоритм (30 стро
 	int		piece_count;
 	t_fig	*struct_arr;
 	int		count;
-	int		map_size;
 
 	count = 0;
 	if (!(file_name))
@@ -29,16 +29,15 @@ int	ft_fillit(char *file_name) // основной алгоритм (30 стро
 	piece_count = ft_tetr_count(file_name);
 	map = ft_make_map(piece_count);
 	struct_arr = ft_struct_arr(file_name, piece_count);
-	map_size = ft_map_size(map);
 	while (count < piece_count)
 	{
-		if (!(ft_put_tetr(map, &struct_arr[count], map_size)) && count >= 0) /* если не удалось поставить надо перейти
+		if (count >= 0 && !(ft_put_tetr(map, &struct_arr[count], ft_map_size(map)))) /* если не удалось поставить надо перейти
 		к предыдущей тетримине и попытаться поставить занаво, начиная со следуеще клетки */
 			count--;
 		else if (count < 0)
 		{
 			ft_delete_map(map);
-			map = ft_enlarge_map(map_size);
+			map = ft_enlarge_map(ft_map_size(map) + 1);
 			count = 0;
 		}
 		else
@@ -55,7 +54,7 @@ void	ft_delete_struct_arr(t_fig *struct_arr) // удаляет память по
 	free((void*)struct_arr);
 }
 
-t_fig	*ft_struct_arr(char *file_name, int piece_count) // создает массив структур (норма)
+t_fig	*ft_struct_arr(char *file_name, int piece_count) // создает массив структур (норма) вроде работает
 {
 	char	buff[BUFF_SIZE];
 	int		fd;
@@ -127,7 +126,7 @@ void	ft_find_position(char **map, int tetr_numb, int *i, int *j) /* нужно �
 	*j = 0;
 }
 
-int	ft_put_tetr(char **map, t_fig *fig, int map_size) // размещение тетримины на карте
+int	ft_put_tetr(char **map, t_fig *fig, int map_size) // размещение тетримины на карте. Вылезает за предел карты
 {
 	int		i;
 	int		j;
@@ -139,14 +138,14 @@ int	ft_put_tetr(char **map, t_fig *fig, int map_size) // размещение т
 	ft_find_position(map, fig->tetr_numb, &i, &j);
 	while (block_numb < 3)
 	{
-		if (map[i][j] == '.')
+		if (map[i][j] == '.') // ? вылетает seg fault на этом месте
 		{
 			map[i][j] = fig->letter;
 			while(block_numb < 3)
 			{
-				if (i + fig->coord[block_numb][1] > 0  && fig->coord[block_numb][0] + j < map_size && i + fig->coord[block_numb][1] > 0  && fig->coord[block_numb][1] + i < map_size)
+				if (i - fig->coord[block_numb][1] >= 0  && j - fig->coord[block_numb][0] < map_size && i - fig->coord[block_numb][1] >= 0  && i - fig->coord[block_numb][1] < map_size) 
 				{	
-					map[i + fig->coord[block_numb][1]][i + fig->coord[block_numb][1]] = fig->letter;
+					map[i - fig->coord[block_numb][1]][j - fig->coord[block_numb][0]] = fig->letter;
 					block_numb++;
 				}
 				else
@@ -154,7 +153,7 @@ int	ft_put_tetr(char **map, t_fig *fig, int map_size) // размещение т
 					ft_remoove_tetr(map, fig->tetr_numb);
 					if (map[i][j + 1])
 						j++;
-					else if (map[i])
+					else if (map[i + 1])
 					{
 						i++;
 						j = 0;
@@ -180,3 +179,21 @@ int	ft_put_tetr(char **map, t_fig *fig, int map_size) // размещение т
 	return (1);
 }
 
+int	ft_tetr_count(char *file_name) // вроде работает
+{
+	int		fd;
+	int		ret;
+	char	buff[400];
+	int		res;
+
+	if (!(file_name))
+        return (0);
+	fd = open(file_name, O_RDONLY);
+	if (fd < 0)
+		return (0);
+	ret = read(fd, buff, 400);
+	if (close (fd) == -1)
+		return (0);
+	res = ret / 21;
+	return (res);
+}

@@ -12,26 +12,30 @@
 
 #include "fillit.h"
 
-void	ft_fig_coord(char *buff, t_fig *fig) // рассчитываются смещения 3ех решеток в тетримине относительно 1ой
+// Не вылетает, но не понимаю что записывается в структуру в координаты
+
+void	ft_fig_coord(char *buff, t_fig *fig) // рассчитываются смещения 3ех решеток в тетримине относительно 1ой 
 {
 	int	init_coord[2];
 	int	count;
 	int	block_count;
+	int	i;
 
-	count = 0;
+	count = 1;
+	i = 0;
 	block_count = -1;
-	while (*buff != '#')
+	while (buff[i] != '#')
 	{
 		count++;
-		buff++;
+		i++;
 	}
 	init_coord[1] = count % 5; // column
 	init_coord[0] = count / 5 + 1; // line
-	while (buff)
+	while (buff[i])
 	{
-		buff++;
+		i++;
 		count++;
-		if (*buff == '#')
+		if (buff[i] == '#')
 		{
 			block_count++;
 			fig->coord[block_count][0] = init_coord[0] - (count / 5 + 1);
