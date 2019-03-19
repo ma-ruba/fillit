@@ -71,7 +71,7 @@ int	ft_valid_tetr_numb(char *buff) //
 	i = 0;
 	char_count = 0;
     line_count = 0;
-	if (buff[19] != '\n' && buff[20] != '\n') //проверяется что в конце тетримины есть 2 \n
+	if (buff[19] != '\n' || buff[20] != '\n') //проверяется что в конце тетримины есть 2 \n
 		return (-1);
 	while (buff[i] != '\n')
 	{
