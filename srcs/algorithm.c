@@ -22,6 +22,7 @@ int	ft_fillit(char *file_name) // основной алгоритм (30 стро
 	int		piece_count;
 	t_fig	*struct_arr;
 	int		count;
+	int		map_size;
 
 	count = 0;
 	if (!(file_name))
@@ -36,8 +37,9 @@ int	ft_fillit(char *file_name) // основной алгоритм (30 стро
 			count--;
 		else if (count < 0)
 		{
+			map_size = ft_map_size(map);
 			ft_delete_map(map);
-			map = ft_enlarge_map(ft_map_size(map) + 1);
+			map = ft_enlarge_map(map_size + 1);
 			count = 0;
 		}
 		else
