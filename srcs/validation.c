@@ -71,8 +71,6 @@ int	ft_valid_tetr_numb(char *buff) //
 	i = 0;
 	char_count = 0;
     line_count = 0;
-	if (buff[19] != '\n' || buff[20] != '\n') //проверяется что в конце тетримины есть 2 \n
-		return (-1);
 	while (buff[i] != '\n')
 	{
 		while (buff[i] != '\n')
@@ -88,6 +86,8 @@ int	ft_valid_tetr_numb(char *buff) //
 	}
 	if (line_count != 4) // проверяетя количество строк
 			return (-1);
+	if (buff[20] != '\n' || buff[19] != '\0')
+		return (-1);
 	return (1);
 }
 
@@ -113,6 +113,8 @@ int	ft_read_valid_file(char *file_name)
 			return (-1);
 		tetr_count++;
 	}
+	if (buff[BUFF_SIZE - 1] == '\n')
+		return (-1);
     //if (close(fd) == -1) // Почему-то возвращвет -1
         //return (-1);
 	close(fd);
