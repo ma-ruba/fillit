@@ -87,7 +87,7 @@ void	ft_remoove_tetr(char **map, int tetr_numb) // удаление тетрим
 
 	i = 0;
 	j = 0;
-	while (map[i])
+	while (map[i] && i < (int)ft_strlen(map[0]))
 	{
 		while (map[i][j])
 		{               
@@ -103,9 +103,9 @@ void	ft_remoove_tetr(char **map, int tetr_numb) // удаление тетрим
 void	ft_find_position(char **map, int tetr_numb, int *i, int *j) /* нужно для определения координаты с которой функция ft_put_tetr()
 будет находить новое положение для тетримины. ПРОБЛЕМЫ: вылезает ща пределы памяти. i = 5 когда размер карты 5. Почему пока не знаю  (норма)*/ 
 {
-	while (map[*i])
+	while (map[*i] && *i < (int)ft_strlen(map[0]))
 	{
-		while (map[*i][*j])
+		while (map[*i][*j] && *i < (int)ft_strlen(map[0]))
 		{
 			if (map[*i][*j] == 'A' + tetr_numb)
 			{
@@ -114,6 +114,11 @@ void	ft_find_position(char **map, int tetr_numb, int *i, int *j) /* нужно �
 				else if (map[*(i + 1)])
 				{
 					(*i)++;
+					*j = 0;
+				}
+				else
+				{
+					*i = 0;
 					*j = 0;
 				}
 				ft_remoove_tetr(map, tetr_numb);

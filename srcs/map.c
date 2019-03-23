@@ -87,7 +87,7 @@ char	**ft_enlarge_map(int map_size) // расширение карты посл�
 
 	count = 0;
 	map = (char **)malloc((map_size + 1) * sizeof(char *));
-	map[map_size] = NULL;
+	map[map_sizeok] = NULL;
 	if (map == NULL)
 		return (NULL);
 	while (count < map_size)
