@@ -2,6 +2,8 @@
 # define FILLIT_H
 
 # include <fcntl.h>
+# include <string.h>
+# include <errno.h>
 # include <unistd.h>
 # include <stdlib.h>
 # include "libft.h"

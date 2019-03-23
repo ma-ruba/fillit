@@ -12,7 +12,7 @@
 
 #include "fillit.h"
 
-/* Все доделано но не отлажено
+/* Проблемы: тетримины накладываются
 Оптимизация: можно ускорить если уменьшить количество чтения файла. Сейчас 3 раза
 */
 
@@ -22,6 +22,7 @@ int	ft_fillit(char *file_name) // основной алгоритм (30 стро
 	int		piece_count;
 	t_fig	*struct_arr;
 	int		count;
+	int		map_size;
 
 	count = 0;
 	if (!(file_name))
@@ -36,8 +37,9 @@ int	ft_fillit(char *file_name) // основной алгоритм (30 стро
 			count--;
 		else if (count < 0)
 		{
+			map_size = ft_map_size(map);
 			ft_delete_map(map);
-			map = ft_enlarge_map(ft_map_size(map) + 1);
+			map = ft_enlarge_map(map_size + 1);
 			count = 0;
 		}
 		else
@@ -56,10 +58,11 @@ void	ft_delete_struct_arr(t_fig *struct_arr) // удаляет память по
 
 t_fig	*ft_struct_arr(char *file_name, int piece_count) // создает массив структур (норма) вроде работает
 {
-	char	buff[BUFF_SIZE];
+	char	buff[BUFF_SIZE + 1];
 	int		fd;
 	t_fig	*struct_arr;
 	int 	tetr_numb; // порядковый номер тетримины начиная с 0
+	int		ret;
 
 	tetr_numb = 0;
 	fd = open(file_name, O_RDONLY);
@@ -67,8 +70,9 @@ t_fig	*ft_struct_arr(char *file_name, int piece_count) // создает мас�
 		return (NULL);
 	if (!(struct_arr = (t_fig *)malloc((piece_count + 1) * sizeof(t_fig))))
 		return (NULL);
-	while (read(fd, buff, BUFF_SIZE) > 0)
+	while ((ret = read(fd, buff, BUFF_SIZE)) > 0)
 	{
+		buff[ret] = '\0';
 		struct_arr[tetr_numb].tetr_numb = tetr_numb;
 		struct_arr[tetr_numb].letter = 'A' + tetr_numb;
 		ft_fig_coord(buff, &struct_arr[tetr_numb++]);
@@ -85,7 +89,7 @@ void	ft_remoove_tetr(char **map, int tetr_numb) // удаление тетрим
 
 	i = 0;
 	j = 0;
-	while (map[i])
+	while (map[i] && i < (int)ft_strlen(map[0]))
 	{
 		while (map[i][j])
 		{               
@@ -99,19 +103,24 @@ void	ft_remoove_tetr(char **map, int tetr_numb) // удаление тетрим
 }                                                                            
 
 void	ft_find_position(char **map, int tetr_numb, int *i, int *j) /* нужно для определения координаты с которой функция ft_put_tetr()
-будет находить новое положение для тетримины  (норма)*/ 
+будет находить новое положение для тетримины. ПРОБЛЕМЫ: вылезает ща пределы памяти. i = 5 когда размер карты 5. Почему пока не знаю  (норма)*/ 
 {
-	while (map[*i])
+	while (map[*i] && *i < (int)ft_strlen(map[0]))
 	{
-		while (map[*i][*j])
+		while (map[*i][*j] && *i < (int)ft_strlen(map[0]))
 		{
 			if (map[*i][*j] == 'A' + tetr_numb)
 			{
-				if (map[*i][*j + 1])
+				if (map[*i][*(j + 1)])
 					(*j)++;
-				else if (map[*i + 1])
+				else if (map[*(i + 1)])
 				{
 					(*i)++;
+					*j = 0;
+				}
+				else
+				{
+					*i = 0;
 					*j = 0;
 				}
 				ft_remoove_tetr(map, tetr_numb);
@@ -126,27 +135,28 @@ void	ft_find_position(char **map, int tetr_numb, int *i, int *j) /* нужно �
 	*j = 0;
 }
 
-int	ft_put_tetr(char **map, t_fig *fig, int map_size) // размещение тетримины на карте. Вылезает за предел карты
+int	ft_put_tetr(char **map, t_fig *fig, int map_size) // размещение тетримины на карте.
 {
 	int		i;
 	int		j;
-	int		block_numb;
+	int		block;
 
 	i = 0;
 	j = 0;
-	block_numb = 0;
+	block = 0;
 	ft_find_position(map, fig->tetr_numb, &i, &j);
-	while (block_numb < 3)
+	while (block < 3)
 	{
-		if (map[i][j] == '.') // ? вылетает seg fault на этом месте
+		if (map[i][j] == '.')
 		{
 			map[i][j] = fig->letter;
-			while(block_numb < 3)
+			while(block < 3)
 			{
-				if (i - fig->coord[block_numb][1] >= 0  && j - fig->coord[block_numb][0] < map_size && i - fig->coord[block_numb][1] >= 0  && i - fig->coord[block_numb][1] < map_size) 
+				if (j - fig->coord[block][1] >= 0 && j - fig->coord[block][1] < map_size && i - fig->coord[block][0] >= 0
+					&& i - fig->coord[block][0] < map_size && map[i - fig->coord[block][0]][j - fig->coord[block][1]] == '.') 
 				{	
-					map[i - fig->coord[block_numb][1]][j - fig->coord[block_numb][0]] = fig->letter;
-					block_numb++;
+					map[i - fig->coord[block][0]][j - fig->coord[block][1]] = fig->letter;
+					block++;
 				}
 				else
 				{
@@ -160,7 +170,7 @@ int	ft_put_tetr(char **map, t_fig *fig, int map_size) // размещение т
 					}
 					else
 						return (0);
-					block_numb = 0;
+					block = 0;
 					break ;
 				}
 			}
@@ -169,11 +179,14 @@ int	ft_put_tetr(char **map, t_fig *fig, int map_size) // размещение т
 		{
 			if (map[i][j + 1])
 				j++;
-			else
+			else if (map[i + 1])
 			{
 				i++;
 				j = 0;
 			}
+			else
+				return (0);
+			
 		}
 	}
 	return (1);
@@ -194,6 +207,6 @@ int	ft_tetr_count(char *file_name) // вроде работает
 	ret = read(fd, buff, 400);
 	if (close (fd) == -1)
 		return (0);
-	res = ret / 21;
+	res = ret / 21 + 1;
 	return (res);
 }
