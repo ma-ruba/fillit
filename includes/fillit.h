@@ -2,6 +2,8 @@
 # define FILLIT_H
 
 # include <fcntl.h>
+# include <string.h>
+# include <errno.h>
 # include <unistd.h>
 # include <stdlib.h>
 # include "libft.h"
@@ -32,6 +34,11 @@ t_fig	*ft_create_struct(char *buff, int tetr_numb);
 void	ft_remoove_tetr(char **map, int tetr_numb);
 char	**ft_enlarge_map(int map_size);
 void	ft_find_position(char **map, int tetr_numb, int *i, int *j);
-int		ft_put_tetr(char **map, t_fig *fig, int map_size);
+int		ft_put_tetr(char **map, t_fig *fig, int block);
+void	exeption(char ***map, int *count);
+int		exept(char **map, int *i, int *j);
+void	posit(char **map, char *position, int *i, int *j);
+int	norm(char **map, t_fig *fig, int *block, char *position);
+
 
 #endif
