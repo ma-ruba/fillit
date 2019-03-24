@@ -46,17 +46,23 @@ int	ft_valid_block_numb(char *buff) // проверяется что нет ли
 {
 	int	block_count;
 	int	i;
+	int	dot_count;
 
 	i = 0;
+	dot_count = 0;
 	block_count = 0;
-	while (buff[i] != '\n' || buff[i + 1] != '\n')
+	while (buff[i] != '\n' || buff[i + 1] != '\0')
 	{
 		if (buff[i] != '\n' && buff[i] != '#' && buff[i] != '.')
 			return (-1);
 		if (buff[i] == '#')
 			block_count++;
+		if (buff[i] == '.')
+			dot_count++;
 		i++;
 	}
+	if (dot_count != 12)
+		return (-1);
 	if (block_count != 4)
 			return (-1);
 	return (1);
@@ -71,7 +77,7 @@ int	ft_valid_tetr_numb(char *buff) //
 	i = 0;
 	char_count = 0;
     line_count = 0;
-	while (buff[i] != '\n')
+	while (buff[i] != '\n' && buff[i])
 	{
 		while (buff[i] != '\n')
 		{
@@ -86,8 +92,6 @@ int	ft_valid_tetr_numb(char *buff) //
 	}
 	if (line_count != 4) // проверяетя количество строк
 			return (-1);
-	if (buff[20] != '\n' || buff[19] != '\0')
-		return (-1);
 	return (1);
 }
 
@@ -107,17 +111,14 @@ int	ft_read_valid_file(char *file_name)
 	while ((ret = read(fd, buff, BUFF_SIZE)) > 0)
 	{
 		buff[ret] = '\0';
-        if (close(fd) == -1)
-            return (-1);
-		if (ft_valid_tetr_numb(buff) == -1 || ft_valid_block_numb(buff) == -1 || ft_connect_tetr(buff) == -1)
+		if (ft_valid_block_numb(buff) == -1 || ft_valid_tetr_numb(buff) == -1 || ft_connect_tetr(buff) == -1)
 			return (-1);
 		tetr_count++;
 	}
 	if (buff[BUFF_SIZE - 1] == '\n')
 		return (-1);
-    //if (close(fd) == -1) // Почему-то возвращвет -1
-        //return (-1);
-	close(fd);
+    if (close(fd) == -1)
+        return (-1);
 	if (!(tetr_count >= 1 && tetr_count <= 26))
 		return (-1);
 	return (1);

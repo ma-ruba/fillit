@@ -21,7 +21,7 @@ void	ft_fig_coord(char *buff, t_fig *fig) // рассчитываются сме
 	int	block_count;
 	int	i;
 
-	count = 1;
+	count = 0;
 	i = 0;
 	block_count = -1;
 	while (buff[i] != '#')
@@ -31,9 +31,8 @@ void	ft_fig_coord(char *buff, t_fig *fig) // рассчитываются сме
 	}
 	init_coord[1] = count % 5; // column
 	init_coord[0] = count / 5; // line
-	while (buff[i])
+	while (buff[i++])
 	{
-		i++;
 		count++;
 		if (buff[i] == '#')
 		{
