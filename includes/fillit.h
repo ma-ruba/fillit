@@ -17,6 +17,14 @@ typedef struct	s_fig
 	char			letter;
 }					t_fig;
 
+typedef struct 	s_cor
+{
+	int				*i;
+	int				*j;
+	int				size;
+}					t_cor;
+
+
 int 	ft_connect_tetr(char *buff);
 int		ft_valid_block_numb(char *buff);
 int		ft_valid_tetr_numb(char *buff);
@@ -37,8 +45,7 @@ void	ft_find_position(char **map, int tetr_numb, int *i, int *j);
 int		ft_put_tetr(char **map, t_fig *fig, int block);
 void	exeption(char ***map, int *count);
 int		exept(char **map, int *i, int *j);
-void	posit(char **map, char *position, int *i, int *j);
-int	norm(char **map, t_fig *fig, int *block, char *position);
-
+int		norma(char **map, t_fig *fig, int *block, t_cor *cor);
+void	norm(char **map, int *i, int *j);
 
 #endif
